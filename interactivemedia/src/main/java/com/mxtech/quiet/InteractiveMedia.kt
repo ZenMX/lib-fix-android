@@ -139,6 +139,7 @@ private fun zipWithFile(path: String, target: String) {
 
 @Throws(Exception::class)
 private fun interactivemedia(root: File) {
+    println("start fix interactivemedia")
     val pool = ClassPool.getDefault()
     val libName = "interactivemedia-3.19.4.jar"
 

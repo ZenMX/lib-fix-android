@@ -17,6 +17,32 @@ java {
     targetCompatibility = JavaVersion.VERSION_1_7
 }
 
+
+task fatJar(type: Jar, dependsOn: ':interactivemedia:jar') {
+    manifest {
+        attributes 'Implementation-Title': 'interactivemedia',
+                'Implementation-Version': '1.0'
+    }
+    baseName = project.name + '-all'
+    from {
+        configurations.compileClasspath.collect {
+            System.out.println('-----------------------' + it)
+            it.isDirectory() ? it : zipTree(it)
+        }
+    }
+    with jar
+}
+
+tasks.create(name: 'fix_lib', type: Exec, dependsOn: ':interactivemedia:fatJar') {
+    workingDir rootProject.file('./')
+    commandLine './interactivemedia/run.sh'
+    standardOutput = new ByteArrayOutputStream()
+    ext.output = {
+        return standardOutput.toString()
+    }
+}
+
+
 dependencies {
 //    implementation rootProject.file("libs/android.jar")
     implementation fileTree(dir: rootProject.file("libs").getAbsolutePath(), include: ['*.jar'])
