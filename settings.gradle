@@ -1,3 +1,5 @@
 rootProject.name = "quiet"
 include ':app'
-include ':interactivemedia'
+//include ':interactivemedia'
+include ':common'
+include ':appcompat'

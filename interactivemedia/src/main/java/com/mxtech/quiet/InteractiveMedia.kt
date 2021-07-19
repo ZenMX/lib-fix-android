@@ -3,9 +3,7 @@ package com.mxtech.quiet
 import javassist.ClassPool
 import javassist.CtNewMethod
 import java.io.*
-import java.util.zip.ZipEntry
-import java.util.zip.ZipFile
-import java.util.zip.ZipOutputStream
+import com.mxtech.quiet.common.*
 
 fun execM(vararg commands: String): String {
     var returnString = ""
@@ -67,73 +65,6 @@ fun exec(command: String): String {
         ex.printStackTrace()
     }
     return returnString
-}
-
-@Throws(IOException::class)
-private fun unzip(file: File, root: File) {
-    val zipFile = ZipFile(file)
-    val entries = zipFile.entries()
-    while (entries.hasMoreElements()) {
-        val zipEntry = entries.nextElement()
-        val target = File(root, zipEntry.name)
-        if (zipEntry.isDirectory) {
-            target.mkdir()
-        } else {
-            target.parentFile.mkdirs()
-            val inputStream = zipFile.getInputStream(zipEntry)
-            val readBytes = inputStream.readBytes()
-            target.writeBytes(readBytes)
-        }
-    }
-}
-
-private fun listFile(dir: File, callback: (File) -> Unit) {
-    val listFiles = dir.listFiles()
-    if (listFiles != null) {
-        for (file in listFiles) {
-            if (file.isFile) {
-                callback.invoke(file)
-            } else if (file.isDirectory) {
-                listFile(file, callback)
-            }
-        }
-    }
-}
-
-private fun jar(path: String, target: String) {
-    val file = File(target)
-    val command = "jar -cvf ${file.name} $path"
-    val exec = execM("cd $path", command)
-    println(exec)
-}
-
-
-private fun zipWithFile(path: String, target: String) {
-    val fos = FileOutputStream(target)
-    val zip = ZipOutputStream(fos)
-    val file = File(path)
-    val rootPath = file.absolutePath
-    val callback = { f: File ->
-        val absolutePath = f.absolutePath
-        val index = absolutePath.indexOf(rootPath)
-        var name = absolutePath.substring(index + 1 + rootPath.length)
-        if (f.isDirectory) {
-            name += "/"
-        }
-        val zipEntry = ZipEntry(name)
-        zip.putNextEntry(zipEntry)
-
-        if (f.isFile) {
-            zip.write(f.readBytes())
-            zip.flush()
-        }
-
-        zip.closeEntry()
-    }
-    listFile(file, callback)
-
-    zip.flush()
-    zip.close()
 }
 
 

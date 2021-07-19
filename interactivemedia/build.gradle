@@ -5,7 +5,7 @@ plugins {
 
 ext {
     publishGroupId = 'com.google.ads.interactivemedia.v3'
-    publishVersion = "3.19.$rootProject.ext.buildNumber"
+    publishVersion = "3.19.4.$rootProject.ext.buildNumber"
     publishVersionCode = 3194
     publishSource = false
 
@@ -28,7 +28,9 @@ task fatJar(type: Jar, dependsOn: ':interactivemedia:jar') {
     from {
         configurations.compileClasspath.collect {
             System.out.println('-----------------------' + it)
-            it.isDirectory() ? it : zipTree(it)
+            if (it.exists()) {
+                it.isDirectory() ? it : zipTree(it)
+            }
         }
     }
     with jar
@@ -47,6 +49,7 @@ tasks.create(name: 'fix_lib', type: Exec, dependsOn: ':interactivemedia:fatJar')
 dependencies {
 //    implementation rootProject.file("libs/android.jar")
     implementation fileTree(dir: rootProject.file("libs").getAbsolutePath(), include: ['*.jar'])
+    implementation project(':common')
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation "org.javassist:javassist:3.28.0-GA"
 }

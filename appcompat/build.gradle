@@ -1,0 +1,53 @@
+plugins {
+    id 'java-library'
+    id 'kotlin'
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_7
+    targetCompatibility = JavaVersion.VERSION_1_7
+}
+
+ext {
+    publishGroupId = 'androidx.appcompat'
+    publishVersion = "1.2.0.$rootProject.ext.buildNumber"
+    publishVersionCode = 120
+    publishSource = false
+
+    publishArtifactId = "appcompat"
+    publishFile = project.file('build/appcompat-1.2.0.aar.fixed.aar')
+}
+
+
+task fatJar(type: Jar, dependsOn: ':appcompat:jar') {
+    manifest {
+        attributes 'Implementation-Title': 'appcompat',
+                'Implementation-Version': '1.0'
+    }
+    baseName = project.name + '-all'
+    from {
+        configurations.compileClasspath.collect {
+            System.out.println('-----------------------' + it)
+            if (it.exists()) {
+                it.isDirectory() ? it : zipTree(it)
+            }
+        }
+    }
+    with jar
+}
+
+tasks.create(name: 'fix_lib', type: Exec, dependsOn: ':appcompat:fatJar') {
+    workingDir rootProject.file('./')
+    commandLine './appcompat/run.sh'
+    standardOutput = new ByteArrayOutputStream()
+    ext.output = {
+        return standardOutput.toString()
+    }
+}
+
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    implementation project(':common')
+}
+
+apply from: "${publishScript}"
