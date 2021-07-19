@@ -5,11 +5,11 @@ plugins {
 
 ext {
     publishGroupId = 'com.google.ads.interactivemedia.v3'
+    publishArtifactId = "interactivemedia"
     publishVersion = "3.19.4.$rootProject.ext.buildNumber"
     publishVersionCode = 3194
     publishSource = false
-
-    publishArtifactId = "interactivemedia"
+    disableDependencies = true
     publishFile = project.file('data/build/interactivemedia-3.19.4.jar.fixed.jar')
 }
 

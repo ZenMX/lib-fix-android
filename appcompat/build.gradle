@@ -10,11 +10,11 @@ java {
 
 ext {
     publishGroupId = 'androidx.appcompat'
+    publishArtifactId = "appcompat"
     publishVersion = "1.2.0.$rootProject.ext.buildNumber"
     publishVersionCode = 120
     publishSource = false
-
-    publishArtifactId = "appcompat"
+    disableDependencies = true
     publishFile = project.file('build/appcompat-1.2.0.aar.fixed.aar')
 }
 
