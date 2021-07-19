@@ -16,6 +16,11 @@ ext {
     publishSource = false
     disableDependencies = true
     publishFile = project.file('build/appcompat-1.2.0.aar.fixed.aar')
+
+//    androidx.appcompat:appcompat-resources:1.2.0
+    publishDependencies = [
+            ['androidx.appcompat', 'appcompat-resources', '1.2.0']
+    ]
 }
 
 
