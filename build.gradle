@@ -25,3 +25,25 @@ allprojects {
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
+
+
+static def getBuildNumber() {
+    return System.getenv("BUILD_NUMBER") as Integer ?: 0
+}
+
+ext {
+    buildNumber = getBuildNumber()
+    buildToolsVersion = '29.0.3'
+    targetSdkVersion = 29
+    minSdkVersion = 21
+    compileSdkVersion = 29
+    versionCode = 1
+    versionName = '1.0.0'
+    ndkVersion = '20.1.5948944'
+
+//    publishGroupId = 'com.mxplay.code'
+//    publishVersion = "1.0.0.${getBuildNumber()}"
+//    publishVersionCode = 10
+    publishScript = 'https://raw.githubusercontent.com/ZenMX/mavenPublisher/master/publish.gradle'
+//    publishScript = '../publish.gradle'
+}
