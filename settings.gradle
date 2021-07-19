@@ -1,0 +1,3 @@
+rootProject.name = "quiet"
+include ':app'
+include ':quiet'
