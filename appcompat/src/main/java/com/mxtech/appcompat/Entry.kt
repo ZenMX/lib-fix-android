@@ -22,11 +22,11 @@ fun fix() {
     val target = File(root, "build/1.2.0/classes-fixed.jar")
     zipWithFile(File(root, "build/1.2.0/jar/").absolutePath, target.absolutePath)
 
-    val target13 = File(root, "build/1.3.0/aar/classes.jar")
+    val target12 = File(root, "build/1.2.0/aar/classes.jar")
     val readBytes = target.readBytes()
-    target13.writeBytes(readBytes)
+    target12.writeBytes(readBytes)
 
-    zipWithFile(File(root, "build/1.3.0/aar").absolutePath, File(root, "build/appcompat-1.2.0.aar.fixed.aar").absolutePath, true)
+    zipWithFile(File(root, "build/1.2.0/aar").absolutePath, File(root, "build/appcompat-1.2.0.aar.fixed.aar").absolutePath, true)
 }
 
 fun main() {
