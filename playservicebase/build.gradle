@@ -1,0 +1,60 @@
+plugins {
+    id 'java-library'
+    id 'kotlin'
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_7
+    targetCompatibility = JavaVersion.VERSION_1_7
+}
+
+ext {
+    publishGroupId = 'com.google.android.gms'
+    publishArtifactId = "play-services-base"
+    publishVersion = "17.1.0.$rootProject.ext.buildNumber"
+    publishVersionCode = 1710
+    publishSource = false
+    disableDependencies = true
+    publishFile = project.file('build/play/play-services-base-17.1.0.aar.fixed.aar')
+
+//    androidx.appcompat:appcompat-resources:1.2.0
+//    publishDependencies = [
+//            ['androidx.appcompat', 'appcompat-resources', '1.2.0']
+//    ]
+}
+
+
+task fatJar(type: Jar, dependsOn: ':playservicebase:jar') {
+    manifest {
+        attributes 'Implementation-Title': 'playserciebase',
+                'Implementation-Version': '1.0'
+    }
+    baseName = project.name + '-all'
+    from {
+        configurations.compileClasspath.collect {
+            System.out.println('-----------------------' + it)
+            if (it.exists()) {
+                it.isDirectory() ? it : zipTree(it)
+            }
+        }
+    }
+    with jar
+}
+
+tasks.create(name: 'fix_lib', type: Exec, dependsOn: ':playservicebase:fatJar') {
+    workingDir rootProject.file('./')
+    commandLine './playservicebase/run.sh'
+    standardOutput = new ByteArrayOutputStream()
+    ext.output = {
+        return standardOutput.toString()
+    }
+}
+
+
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    implementation project(':common')
+    implementation "org.javassist:javassist:3.28.0-GA"
+}
+
+apply from: "${publishScript}"
