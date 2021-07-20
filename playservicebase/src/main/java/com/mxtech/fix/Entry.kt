@@ -41,9 +41,7 @@ fun main() {
 
     val target = File(buildRoot, "aar/classes.jar")
 
-    val readBytes = file.readBytes()
-    target.writeBytes(readBytes)
-
+    file.copyTo(target, true)
 
     zipWithFile(File(buildRoot, "aar").absolutePath, File(buildRoot, "play-services-base-17.1.0.aar.fixed.aar").absolutePath, true)
 
