@@ -27,7 +27,7 @@ abstract class BaseChanger {
 
         file.copyTo(target, true)
 
-        zipWithFile(File(buildRoot, "aar").absolutePath, File(buildRoot, "play-services-ads-identifier-17.0.0.aar.changed.aar").absolutePath, true)
+        zipWithFile(File(buildRoot, "aar").absolutePath, File(buildRoot, "${libName()}.changed.aar").absolutePath, true)
 
         println("update lib completed!!")
     }

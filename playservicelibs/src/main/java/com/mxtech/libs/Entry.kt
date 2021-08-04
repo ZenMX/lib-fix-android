@@ -1,7 +1,7 @@
 package com.mxtech.libs
 
-import com.mxtech.libs.change.PlayServicesAdsIdChanger
+import com.mxtech.libs.change.PlayServicesMeasurementChanger
 
 fun main() {
-    PlayServicesAdsIdChanger().change()
+    PlayServicesMeasurementChanger().change()
 }
