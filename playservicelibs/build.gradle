@@ -1,0 +1,55 @@
+plugins {
+    id 'java-library'
+    id 'kotlin'
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_7
+    targetCompatibility = JavaVersion.VERSION_1_7
+}
+
+ext {
+    publishGroupId = 'com.google.android.gms'
+    publishArtifactId = "play-services-ads-identifier"
+    publishVersion = "17.0.0.1"
+    publishVersionCode = 1700
+    publishSource = false
+    disableDependencies = true
+    publishFile = project.file('build/play/play-services-ads-identifier-17.0.0.aar.changed.aar')
+}
+
+
+task fatJar(type: Jar, dependsOn: ':playservicelibs:jar') {
+    manifest {
+        attributes 'Implementation-Title': 'playservicelibs',
+                'Implementation-Version': '1.0'
+    }
+    baseName = project.name + '-all'
+    from {
+        configurations.compileClasspath.collect {
+            System.out.println('-----------------------' + it)
+            if (it.exists()) {
+                it.isDirectory() ? it : zipTree(it)
+            }
+        }
+    }
+    with jar
+}
+
+tasks.create(name: 'change_lib', type: Exec, dependsOn: ':playservicelibs:fatJar') {
+    workingDir rootProject.file('./')
+    commandLine './playservicelibs/run.sh'
+    standardOutput = new ByteArrayOutputStream()
+    ext.output = {
+        return standardOutput.toString()
+    }
+}
+
+
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    implementation project(':common')
+    implementation "org.javassist:javassist:3.28.0-GA"
+}
+
+apply from: "${publishScript}"
