@@ -1,6 +1,7 @@
 package com.mxtech.libs.change
 
 import javassist.ClassPool
+import javassist.CtNewMethod
 import java.io.File
 
 /**
@@ -17,13 +18,20 @@ class PlayServicesMeasurementChanger : BaseChanger() {
         val source = File(buildRoot, "aar/classes.jar")
         pool.appendClassPath(source.absolutePath)
 
-        val cc = pool["com.google.android.gms.internal.measurement.zzdj"]
+        val cc = pool["com.google.android.gms.measurement.internal.zzkf"]
 
-        val zzbv = cc.getDeclaredMethod("zzG")
-        zzbv.setBody(
-            "{String uuid = String.valueOf(java.util.UUID.randomUUID());" +
-                    "System.out.println(\"========uuid:\" + uuid + \"========\");" +
-                    "return uuid;}"
+        val zzh = cc.getDeclaredMethod("zzh")
+        val zzhNew = CtNewMethod.copy(zzh, "zzhNew", cc, null)
+
+        cc.addMethod(zzhNew)
+
+        //SecurityException
+        zzh.setBody(
+            "{" +
+                    "android.util.Log.e(\"HOOK_LOG\",\"hook method:${zzh.longName}\", new java.lang.Exception());" +
+                    "return $0.zzhNew($$);" +
+                    "}"
+
         )
 
         cc.writeFile(File(buildRoot, "jar").absolutePath)

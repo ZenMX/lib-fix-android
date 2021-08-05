@@ -11,7 +11,7 @@ java {
 ext {
     publishGroupId = 'com.google.android.gms'
     publishArtifactId = "play-services-measurement"
-    publishVersion = "18.0.2.1"
+    publishVersion = "18.0.2.2"
     publishVersionCode = 1802
     publishSource = false
     disableDependencies = true
@@ -47,6 +47,7 @@ tasks.create(name: 'change_lib', type: Exec, dependsOn: ':playservicelibs:fatJar
 
 
 dependencies {
+    implementation fileTree(dir: rootProject.file("libs").getAbsolutePath(), include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation project(':common')
     implementation "org.javassist:javassist:3.28.0-GA"
