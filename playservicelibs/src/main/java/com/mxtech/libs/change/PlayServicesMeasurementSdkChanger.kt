@@ -1,7 +1,6 @@
 package com.mxtech.libs.change
 
 import javassist.ClassPool
-import javassist.CtNewMethod
 import java.io.File
 
 /**
@@ -20,25 +19,12 @@ class PlayServicesMeasurementSdkChanger : BaseChanger() {
 
         val cc = pool["com.google.android.gms.measurement.internal.AppMeasurementDynamiteService"]
 
-        val logEvent = cc.getDeclaredMethod("logEvent")
-        val logEventNew = CtNewMethod.copy(logEvent, "logEventNew", cc, null)
-
-        cc.addMethod(logEventNew)
-
-        //SecurityException
-        logEvent.setBody(
-            "{" +
-//                    "java.lang.StringBuilder sb = new java.lang.StringBuilder();" +
-//                    "java.util.Set<java.lang.String> keys = $3.keySet();" +
-//                    "for(java.lang.String key : keys) {" +
-//                    "    sb.append(key).append(\":\").append(b.get(key)).append(\";\");" +
-//                    "}" +
-//                    "java.lang.String ss = sb.toString();" +
-                    "android.util.Log.e(\"HOOK_LOG\", \"bundle value:\" + $3);" +
-                    "$0.logEventNew($$);" +
-                    "}"
-
-        )
+        val methods = cc.declaredMethods
+        for (method in methods) {
+            val name = method.name
+            println("====$name")
+            method.insertBefore("android.util.Log.e(\"HOOK_LOG\", \"method called:$name\");")
+        }
 
         cc.writeFile(File(buildRoot, "jar").absolutePath)
     }

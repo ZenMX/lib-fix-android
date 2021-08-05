@@ -48,6 +48,7 @@ tasks.create(name: 'change_lib', type: Exec, dependsOn: ':playservicelibs:fatJar
 
 dependencies {
     implementation fileTree(dir: rootProject.file("libs").getAbsolutePath(), include: ['*.jar'])
+    implementation fileTree(dir: project.file("libs").getAbsolutePath(), include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation project(':common')
     implementation "org.javassist:javassist:3.28.0-GA"
