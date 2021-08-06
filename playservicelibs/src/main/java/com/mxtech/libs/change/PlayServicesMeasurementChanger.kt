@@ -27,27 +27,61 @@ class PlayServicesMeasurementChanger : BaseChanger() {
                     "    java.util.Map.Entry entry = it.next();" +
                     "    sb.append(entry.getKey()).append(\"=\").append(entry.getValue()).append(\";\");" +
                     "}" +
-                    "android.util.Log.println(6, \"FA-SVC\", \"map=\" + sb.toString());"
+                    "android.util.Log.println(2, \"FA-SVC\", \"map=\" + sb.toString());"
         )
+        var methods = cc.methods
+        for (method in methods) {
+            if (method.methodInfo.codeAttribute == null) continue
+            try {
+                method.insertBefore(
+                    "android.util.Log.println(2, \"FA-SVC\", \"=============${method.longName}\");" +
+                            "android.util.Log.v(\"FA-SVC\", \"=============${method.longName}\");"
+                )
+            } catch (e: Exception){
+                println("method:${method.longName} insert log exception")
+            }
+        }
 
         cc.writeFile(File(buildRoot, "jar").absolutePath)
 
         cc = pool["com.google.android.gms.measurement.internal.zzkd"]
-        val zzF = cc.getDeclaredMethod("zzF")
-        val zzFNew = CtNewMethod.copy(zzF, "zzFNew", cc, null)
-        cc.addMethod(zzFNew)
-
-        zzF.setBody(
-            "{" +
-                    "android.util.Log.println(6, \"FA-SVC\", \"==========hook upload data method============\");" +
-                    "$0.zzFNew();" +
-                    "}"
-        )
+//        val zzF = cc.getDeclaredMethod("zzF")
+//        val zzFNew = CtNewMethod.copy(zzF, "zzFNew", cc, null)
+//        cc.addMethod(zzFNew)
+//
+//        zzF.setBody(
+//            "{" +
+//                    "android.util.Log.println(2, \"FA-SVC\", \"==========hook upload data method============\");" +
+//                    "$0.zzFNew();" +
+//                    "}"
+//        )
+        methods = cc.methods
+        for (method in methods) {
+            if (method.methodInfo.codeAttribute == null) continue
+            try {
+                method.insertBefore(
+                    "android.util.Log.println(2, \"FA-SVC\", \"=============${method.longName}\");" +
+                            "android.util.Log.v(\"FA-SVC\", \"=============${method.longName}\");"
+                )
+            } catch (e: Exception){
+                println("method:${method.longName} insert log exception")
+            }
+        }
         cc.writeFile(File(buildRoot, "jar").absolutePath)
 
         cc = pool["com.google.android.gms.measurement.internal.zzkf"]
-        val zzs = cc.getDeclaredMethod("zzs")
-        zzs.insertBefore("android.util.Log.println(6, \"FA-SVC\", \"=============byteArray===========\");")
+        methods = cc.methods
+        for (method in methods) {
+            if (method.methodInfo.codeAttribute == null) continue
+            try {
+                method.insertBefore(
+                    "android.util.Log.println(2, \"FA-SVC\", \"=============${method.longName}\");" +
+                            "android.util.Log.v(\"FA-SVC\", \"=============${method.longName}\");"
+                )
+            } catch (e: Exception){
+                println("method:${method.longName} insert log exception")
+            }
+        }
         cc.writeFile(File(buildRoot, "jar").absolutePath)
 
 //        val zzh = cc.getDeclaredMethod("zzh")
