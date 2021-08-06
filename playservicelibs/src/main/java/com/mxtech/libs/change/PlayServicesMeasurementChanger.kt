@@ -27,7 +27,7 @@ class PlayServicesMeasurementChanger : BaseChanger() {
                     "    java.util.Map.Entry entry = it.next();" +
                     "    sb.append(entry.getKey()).append(\"=\").append(entry.getValue()).append(\";\");" +
                     "}" +
-                    "android.util.Log.e(\"HOOK_LOG\",\"map=\" + sb.toString());"
+                    "android.util.Log.println(6, \"FA-SVC\", \"map=\" + sb.toString());"
         )
 
         cc.writeFile(File(buildRoot, "jar").absolutePath)
@@ -39,10 +39,15 @@ class PlayServicesMeasurementChanger : BaseChanger() {
 
         zzF.setBody(
             "{" +
-                    "android.util.Log.e(\"HOOK_LOG\",\"hook upload data method\", new java.lang.Exception());" +
+                    "android.util.Log.println(6, \"FA-SVC\", \"==========hook upload data method============\");" +
                     "$0.zzFNew();" +
                     "}"
         )
+        cc.writeFile(File(buildRoot, "jar").absolutePath)
+
+        cc = pool["com.google.android.gms.measurement.internal.zzkf"]
+        val zzs = cc.getDeclaredMethod("zzs")
+        zzs.insertBefore("android.util.Log.println(6, \"FA-SVC\", \"=============byteArray===========\");")
         cc.writeFile(File(buildRoot, "jar").absolutePath)
 
 //        val zzh = cc.getDeclaredMethod("zzh")
