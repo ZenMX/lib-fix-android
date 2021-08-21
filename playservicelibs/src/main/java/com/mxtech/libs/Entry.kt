@@ -1,7 +1,7 @@
 package com.mxtech.libs
 
-import com.mxtech.libs.change.PlayServicesMeasurementSdkApiChanger
+import com.mxtech.libs.change.PlayServicesMeasurementImplChanger
 
 fun main() {
-    PlayServicesMeasurementSdkApiChanger().change()
+    PlayServicesMeasurementImplChanger().change()
 }

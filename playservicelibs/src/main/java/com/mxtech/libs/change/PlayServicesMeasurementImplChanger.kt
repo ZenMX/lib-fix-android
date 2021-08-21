@@ -18,7 +18,7 @@ class PlayServicesMeasurementImplChanger : BaseChanger() {
         val source = File(buildRoot, "aar/classes.jar")
         pool.appendClassPath(source.absolutePath)
 
-        val cc = pool["com.google.android.gms.measurement.internal.zzjb"]
+        var cc = pool["com.google.android.gms.measurement.internal.zzjb"]
 
         val zzr = cc.getDeclaredMethod("zzR")
         val zzrNew = CtNewMethod.copy(zzr, "zzrNew", cc, null)
@@ -42,6 +42,49 @@ class PlayServicesMeasurementImplChanger : BaseChanger() {
 
         )
 
+        cc.writeFile(File(buildRoot, "jar").absolutePath)
+
+        cc = pool["com.google.android.gms.measurement.internal.zzhn"]
+        val zzv = cc.getDeclaredMethod("zzv")
+        zzv.insertBefore("""
+            android.os.Bundle bundle = $3;
+            if(bundle != null) {
+            java.lang.StringBuilder sb = new java.lang.StringBuilder();
+            java.util.Iterator it = bundle.keySet().iterator();
+            while (it.hasNext()) {
+                java.lang.String key = it.next();
+                java.lang.Object value = bundle.get(key);
+                sb.append(key).append("=").append(value).append(";");
+            }
+            android.util.Log.e("HOOK_LOG", "arg1=" + $1 + ",arg2=" + $2 + ",arg3=" + sb);
+        }
+        """.trimIndent())
+
+        val zzx = cc.getDeclaredMethod("zzx")
+        zzx.insertBefore("""
+            android.os.Bundle bundle = $4;
+            if(bundle != null) {
+            java.lang.StringBuilder sb = new java.lang.StringBuilder();
+            java.util.Iterator it = bundle.keySet().iterator();
+            while (it.hasNext()) {
+                java.lang.String key = it.next();
+                java.lang.Object value = bundle.get(key);
+                sb.append(key).append("=").append(value).append(";");
+            }
+            android.util.Log.e("HOOK_LOG", "zzx bundle=" + sb);
+        }
+        """.trimIndent())
+//        zzv.insertBefore("""
+//            android.util.Log.e("HOOK_LOG", "arg1=" + $1 + ",arg2=" + $2 + ",arg3=" + $3);
+//        """.trimIndent())
+        cc.writeFile(File(buildRoot, "jar").absolutePath)
+
+
+        cc = pool["com.google.android.gms.measurement.internal.zzgt"]
+        val runMethod = cc.getDeclaredMethod("run")
+        runMethod.insertBefore("""
+            android.util.Log.e("HOOK_LOG", "run class=" + $0.getClass().getName());
+        """.trimIndent())
         cc.writeFile(File(buildRoot, "jar").absolutePath)
     }
 
