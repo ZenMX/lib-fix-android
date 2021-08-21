@@ -47,32 +47,32 @@ class PlayServicesMeasurementImplChanger : BaseChanger() {
         cc = pool["com.google.android.gms.measurement.internal.zzhn"]
         val zzv = cc.getDeclaredMethod("zzv")
         zzv.insertBefore("""
-            android.os.Bundle bundle = $3;
-            if(bundle != null) {
-            java.lang.StringBuilder sb = new java.lang.StringBuilder();
-            java.util.Iterator it = bundle.keySet().iterator();
-            while (it.hasNext()) {
-                java.lang.String key = it.next();
-                java.lang.Object value = bundle.get(key);
-                sb.append(key).append("=").append(value).append(";");
-            }
-            android.util.Log.e("HOOK_LOG", "arg1=" + $1 + ",arg2=" + $2 + ",arg3=" + sb.toString());
-        }
+//            android.os.Bundle bundle = $3;
+//            if(bundle != null) {
+//            java.lang.StringBuilder sb = new java.lang.StringBuilder();
+//            java.util.Iterator it = bundle.keySet().iterator();
+//            while (it.hasNext()) {
+//                java.lang.String key = it.next();
+//                java.lang.Object value = bundle.get(key);
+//                sb.append(key).append("=").append(value).append(";");
+//            }
+            android.util.Log.e("HOOK_LOG", "arg1=" + $1 + ",arg2=" + $2 + ",arg3=" + $3);
+//        }
         """.trimIndent())
 
         val zzx = cc.getDeclaredMethod("zzx")
         zzx.insertBefore("""
-            android.os.Bundle bundle = $4;
-            if(bundle != null) {
-            java.lang.StringBuilder sb = new java.lang.StringBuilder();
-            java.util.Iterator it = bundle.keySet().iterator();
-            while (it.hasNext()) {
-                java.lang.String key = it.next();
-                java.lang.Object value = bundle.get(key);
-                sb.append(key).append("=").append(value).append(";");
-            }
-            android.util.Log.e("HOOK_LOG", "zzx bundle=" + sb.toString());
-        }
+//            android.os.Bundle bundle = $4;
+//            if(bundle != null) {
+//            java.lang.StringBuilder sb = new java.lang.StringBuilder();
+//            java.util.Iterator it = bundle.keySet().iterator();
+//            while (it.hasNext()) {
+//                java.lang.String key = it.next();
+//                java.lang.Object value = bundle.get(key);
+//                sb.append(key).append("=").append(value).append(";");
+//            }
+            android.util.Log.e("HOOK_LOG", "zzx bundle=" + $4);
+//        }
         """.trimIndent())
 //        zzv.insertBefore("""
 //            android.util.Log.e("HOOK_LOG", "arg1=" + $1 + ",arg2=" + $2 + ",arg3=" + $3);
