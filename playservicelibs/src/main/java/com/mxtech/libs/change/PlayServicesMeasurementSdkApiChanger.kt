@@ -30,13 +30,23 @@ class PlayServicesMeasurementSdkApiChanger : BaseChanger() {
 
         )
 
+        val zzc = cc.getDeclaredMethod("zzc")
+        zzc.insertBefore("""
+            android.util.Log.e("HOOK_LOG", "boolean arg=" + $2);
+            $2 = false;
+        """.trimIndent())
+        zzc.insertAfter("""
+            Object result =  ${'$'}_;
+            android.util.Log.e("HOOK_LOG", "return:" + result.getClass().getName(), new java.lang.Exception());
+        """.trimIndent())
+
         cc.writeFile(File(buildRoot, "jar").absolutePath)
 
         cc = pool["com.google.android.gms.internal.measurement.zzbg"]
         val runMethod = cc.getDeclaredMethod("run")
         runMethod.setBody("""{
         try {
-            android.util.Log.e("HOOK_LOG", "else zza()"  + this.getClass().getName(), new java.lang.Exception());
+            android.util.Log.e("HOOK_LOG", "else zza(), "  + this.getClass().getName());
             zza();
         } catch (Exception e) {
             android.util.Log.e("HOOK_LOG", "else zzb()" + this.getClass().getName());
