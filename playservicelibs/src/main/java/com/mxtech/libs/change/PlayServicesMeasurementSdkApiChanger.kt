@@ -36,8 +36,8 @@ class PlayServicesMeasurementSdkApiChanger : BaseChanger() {
         val runMethod = cc.getDeclaredMethod("run")
         runMethod.setBody("""{
         try {
+            android.util.Log.e("HOOK_LOG", "else zza()"  + this.getClass().getName(), new java.lang.Exception());
             zza();
-            android.util.Log.e("HOOK_LOG", "else zza()");
         } catch (Exception e) {
             android.util.Log.e("HOOK_LOG", "else zzb()" + this.getClass().getName());
             zzb();

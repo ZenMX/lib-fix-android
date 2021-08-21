@@ -11,7 +11,7 @@ java {
 ext {
     publishGroupId = 'com.google.android.gms'
     publishArtifactId = "play-services-measurement-sdk-api"
-    publishVersion = "18.0.2.2"
+    publishVersion = "18.0.2.3"
     publishVersionCode = 1802
     publishSource = false
     disableDependencies = true
