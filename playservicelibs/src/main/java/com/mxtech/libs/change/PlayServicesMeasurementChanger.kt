@@ -24,16 +24,16 @@ class PlayServicesMeasurementChanger : BaseChanger() {
         for(clsName in classNames) {
             cc = pool[clsName]
             if(cc.isAnnotation || cc.isEnum || cc.isInterface || cc.isInterface || cc.isArray || cc.isPrimitive) continue
+            cc.defrost()
             val methods = cc.methods
             for (method in methods) {
                 try {
                     if (method.methodInfo.codeAttribute == null) continue
                     method.insertBefore(
-                        "android.util.Log.println(2, \"FA-SVC\", \"=============${method.longName}\");" +
                                 "android.util.Log.v(\"FA-SVC\", \"=============${method.longName}\");"
                     )
                 } catch (e: Exception){
-                    println("method:${method.longName} insert log exception")
+                    println("method:${method.longName} insert log exception, " + e.message)
                 }
             }
             cc.writeFile(File(buildRoot, "jar").absolutePath)
@@ -65,10 +65,13 @@ class PlayServicesMeasurementChanger : BaseChanger() {
 //
 //        cc.writeFile(File(buildRoot, "jar").absolutePath)
 //
-//        cc = pool["com.google.android.gms.measurement.internal.zzkd"]
-//        val zzF = cc.getDeclaredMethod("zzF")
-//        val zzFNew = CtNewMethod.copy(zzF, "zzFNew", cc, null)
-//        cc.addMethod(zzFNew)
+        cc = pool["com.google.android.gms.measurement.internal.zzkd"]
+        cc.defrost()
+        val zzak = cc.getDeclaredMethod("zzak")
+        zzak.insertBefore("""
+            $0.zzt = true;
+        """.trimIndent())
+        cc.writeFile(File(buildRoot, "jar").absolutePath)
 //
 //        zzF.setBody(
 //            "{" +

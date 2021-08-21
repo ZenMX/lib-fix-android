@@ -57,7 +57,6 @@ class PlayServicesMeasurementImplChanger : BaseChanger() {
 //                sb.append(key).append("=").append(value).append(";");
 //            }
             android.util.Log.e("HOOK_LOG", "arg1=" + $1 + ",arg2=" + $2 + ",arg3=" + $3);
-            $3.putString("","");
 //        }
         """.trimIndent())
 
