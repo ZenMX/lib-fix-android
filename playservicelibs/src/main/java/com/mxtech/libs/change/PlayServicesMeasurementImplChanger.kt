@@ -57,6 +57,7 @@ class PlayServicesMeasurementImplChanger : BaseChanger() {
 //                sb.append(key).append("=").append(value).append(";");
 //            }
             android.util.Log.e("HOOK_LOG", "arg1=" + $1 + ",arg2=" + $2 + ",arg3=" + $3);
+            $3.putString("","");
 //        }
         """.trimIndent())
 
@@ -86,6 +87,27 @@ class PlayServicesMeasurementImplChanger : BaseChanger() {
             android.util.Log.e("HOOK_LOG", "run class=" + $0.getClass().getName());
         """.trimIndent())
         cc.writeFile(File(buildRoot, "jar").absolutePath)
+
+        cc = pool["com.google.android.gms.measurement.internal.zzjb"]
+        cc.defrost()
+        val zzD = cc.getDeclaredMethod("zzD")
+        zzD.setBody("""
+            {
+                android.util.Log.e("HOOK_LOG", "zzD return false");
+                return false;
+            }
+        """.trimIndent())
+        cc.writeFile(File(buildRoot, "jar").absolutePath)
+
+        cc = pool["com.google.android.gms.measurement.internal.zzae"]
+        cc.defrost()
+        val zzy = cc.getDeclaredMethod("zzy")
+        zzy.insertAfter("""
+            android.util.Log.e("HOOK_LOG", "zzy return " + ${'$'}_);
+            ${'$'}_ = false;
+        """.trimIndent())
+        cc.writeFile(File(buildRoot, "jar").absolutePath)
+
     }
 
 }
