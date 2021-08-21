@@ -18,7 +18,7 @@ class PlayServicesMeasurementSdkApiChanger : BaseChanger() {
         val source = File(buildRoot, "aar/classes.jar")
         pool.appendClassPath(source.absolutePath)
 
-        val cc = pool["com.google.android.gms.internal.measurement.zzbr"]
+        var cc = pool["com.google.android.gms.internal.measurement.zzbr"]
         val zzW = cc.getDeclaredMethod("zzW")
         val zzWNew = CtNewMethod.copy(zzW, "zzWNew", cc, null)
         cc.addMethod(zzWNew)
@@ -31,6 +31,20 @@ class PlayServicesMeasurementSdkApiChanger : BaseChanger() {
         )
 
         cc.writeFile(File(buildRoot, "jar").absolutePath)
+
+        cc = pool["com.google.android.gms.internal.measurement.zzbg"]
+        val runMethod = cc.getDeclaredMethod("run")
+        runMethod.setBody("""{
+        try {
+            zza();
+            android.util.Log.e("HOOK_LOG", "else zza()");
+        } catch (Exception e) {
+            android.util.Log.e("HOOK_LOG", "else zzb()" + this.getClass().getName());
+            zzb();
+        }
+        }""".trimIndent())
+        cc.writeFile(File(buildRoot, "jar").absolutePath)
+
     }
 
 }
