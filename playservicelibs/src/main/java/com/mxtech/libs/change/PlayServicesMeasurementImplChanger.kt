@@ -56,7 +56,7 @@ class PlayServicesMeasurementImplChanger : BaseChanger() {
                 java.lang.Object value = bundle.get(key);
                 sb.append(key).append("=").append(value).append(";");
             }
-            android.util.Log.e("HOOK_LOG", "arg1=" + $1 + ",arg2=" + $2 + ",arg3=" + sb);
+            android.util.Log.e("HOOK_LOG", "arg1=" + $1 + ",arg2=" + $2 + ",arg3=" + sb.toString());
         }
         """.trimIndent())
 
@@ -71,7 +71,7 @@ class PlayServicesMeasurementImplChanger : BaseChanger() {
                 java.lang.Object value = bundle.get(key);
                 sb.append(key).append("=").append(value).append(";");
             }
-            android.util.Log.e("HOOK_LOG", "zzx bundle=" + sb);
+            android.util.Log.e("HOOK_LOG", "zzx bundle=" + sb.toString());
         }
         """.trimIndent())
 //        zzv.insertBefore("""
