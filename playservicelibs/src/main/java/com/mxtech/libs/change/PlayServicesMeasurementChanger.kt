@@ -65,13 +65,16 @@ class PlayServicesMeasurementChanger : BaseChanger() {
 //
 //        cc.writeFile(File(buildRoot, "jar").absolutePath)
 //
-        cc = pool["com.google.android.gms.measurement.internal.zzkd"]
+
+        cc = pool["com.google.android.gms.measurement.internal.zzjs"]
         cc.defrost()
-        val zzak = cc.getDeclaredMethod("zzak")
-        zzak.insertBefore("""
-            $0.zzt = true;
+        val zza = cc.getDeclaredMethod("zza")
+        zza.setBody("""
+            $0.zza.zza.zzF();
         """.trimIndent())
         cc.writeFile(File(buildRoot, "jar").absolutePath)
+
+
 //
 //        zzF.setBody(
 //            "{" +
