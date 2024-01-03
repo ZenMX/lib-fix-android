@@ -1,0 +1,63 @@
+plugins {
+    id 'java-library'
+    id 'kotlin'
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_7
+    targetCompatibility = JavaVersion.VERSION_1_7
+}
+
+ext {
+    publishGroupId = 'com.google.firebase'
+    publishArtifactId = "firebase-installations"
+    publishVersion = "17.0.3.$rootProject.ext.buildNumber"
+    publishVersionCode = 1703
+    publishSource = false
+    disableDependencies = true
+    publishFile = project.file('build/play/firebase-installations-17.0.3.aar.fixed.aar')
+
+//    androidx.appcompat:appcompat-resources:1.2.0
+    publishDependencies = [
+            ['com.google.android.gms', 'play-services-tasks', '18.0.2'],
+            ['com.google.firebase', 'firebase-common', '20.1.2'],
+            ['com.google.firebase', 'firebase-components', '17.0.1'],
+            ['com.google.firebase', 'firebase-installations-interop', '17.0.2']
+    ]
+}
+
+
+task fatJar(type: Jar, dependsOn: ':firebase-installations:jar') {
+    manifest {
+        attributes 'Implementation-Title': 'playserciebase',
+                'Implementation-Version': '1.0'
+    }
+    baseName = project.name + '-all'
+    from {
+        configurations.compileClasspath.collect {
+            System.out.println('-----------------------' + it)
+            if (it.exists()) {
+                it.isDirectory() ? it : zipTree(it)
+            }
+        }
+    }
+    with jar
+}
+
+tasks.create(name: 'fix_lib', type: Exec, dependsOn: ':firebase-installations:fatJar') {
+    workingDir rootProject.file('./')
+    commandLine './firebase-installations/run.sh'
+    standardOutput = new ByteArrayOutputStream()
+    ext.output = {
+        return standardOutput.toString()
+    }
+}
+
+
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    implementation project(':common')
+    implementation "org.javassist:javassist:3.28.0-GA"
+}
+
+apply from: "${publishScript}"
